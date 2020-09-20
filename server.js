@@ -5,7 +5,7 @@ const fs = require("fs");
 const moment = require("moment");
 
 // Sets localhost: PORT
-const PORT = 3000;
+const PORT = process.env.PORT || 3001;
 
 // Routes
 app.use(express.static("public"));
