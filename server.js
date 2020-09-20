@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const fs = require("fs");
+const moment = require("moment");
 
 // Sets localhost: PORT
 const PORT = 3000;
@@ -22,20 +23,43 @@ app.get("/notes", function(req, res) {
 });
 
 app.get("/api/notes", function(req, res) {
-    let readNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), 'utf-8'));
-    res.json(readNotes);
+    db = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), 'utf-8'));
+    console.log(db);
+    res.json(db);
 });
 
 // POST
-// app.post("/api/notes", function(req, res) {
-//     readNotes = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), 'utf-8'));
-//     let addNote = req.body;
+app.post("/api/notes", function(req, res) {
+    var data = {
+        id: moment().format(), //format(lll)
+        title: req.body.title,
+        text: req.body.text
+    }
 
-//     let noteID = [];
+    db.push(data);
+    fs.writeFile("./db/db.json", JSON.stringify(db), function(err) {
+        if (err) throw err;
+        console.log("Note posted");
+        res.json(db);
+    });
+});
 
-// });
+// DELETE
+app.delete("/api/notes/:id", (req, res) => {
+    db = JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), 'utf-8'));
 
+    (async() => {
+        const deleteNote = db.indexOf(db.find(index => index.id === req.params.id));
+        console.log(deleteNote);
+        db.splice(deleteNote, 1);
 
+        fs.writeFile("./db/db.json", JSON.stringify(db), function(err) {
+            if (err) throw err;
+            console.log("Note deleted");
+            res.json(req.body);
+        });
+    })();
+});
 
 // Listener for the PORT and logs a print when the server is running
 app.listen(PORT, function() {
