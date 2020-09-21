@@ -67,7 +67,7 @@
   ## Questions: 
   For questions about the project go to my GitHub page at:
   
-    [GitHub Profile](https://github.com/Nardacyon)
+   [GitHub Profile](https://github.com/Nardacyon)
     
   Or email me at tingking2019@gmail.com
     
